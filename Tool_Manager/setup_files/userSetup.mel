@@ -1,0 +1,15 @@
+string $userScriptsDir = `internalVar -userScriptDir`;
+string $tool_manager_path = $userScriptsDir + "tool_manager_setup.py";
+string $evalString = ""; // Initialize here
+
+// Python version check
+if (`python("import sys; sys.version_info[0] == 2")` == 1) {
+    // Python 2
+    $evalString = ("python(\"execfile('" + $tool_manager_path + "')\")");
+} else {
+    // Python 3
+    $evalString = ("python(\"with open('" + $tool_manager_path + "') as f: exec(f.read())\")");
+}
+
+evalDeferred($evalString);
+
